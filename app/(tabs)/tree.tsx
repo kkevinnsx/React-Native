@@ -6,18 +6,23 @@ import { ScreenContent } from '~/components/ScreenContent';
 export default function Home() {
     const tituloDinheiro = 'Conversão de valores';
     const qntdDinheiro   = 'Qual o valor a ser convertido?';
-    const qntdEuro       = '5.79';
-    const qntdDolar      = '5.39';
-    const qntdLibras     = '6.84';
-    const [valor, setValor]         = useState('');
-    const [resultado, setResultado] = useState('');
+    const [qntdEuro,   setQntdEuro]  = useState('5.90');
+    const [qntdDolar,  setQntdDolar] = useState('5.52');
+    const [qntdLibras, setQntdLibras]= useState('6.97');
+    const [valor, setValor]          = useState('');
+    const [resultado, setResultado]  = useState('');
 
     const converterValores = () => {
-        const qntdEuroFloat   = parseFloat(qntdEuro);
-        const qntdDolarFloat  = parseFloat(qntdDolar);
-        const qntdLibrasFloat = parseFloat(qntdLibras);
+         const qntdEuroFloat   = parseFloat(qntdEuro);
+         const qntdDolarFloat  = parseFloat(qntdDolar);
+         const qntdLibrasFloat = parseFloat(qntdLibras);
             if(valor > 0) {
-            }else {
+                const resultEuro   = Math.ceil(valor / qntdEuroFloat);
+                const resultDolar  = Math.ceil(valor / qntdDolarFloat);
+                const resultLibra  = Math.ceil(valor / qntdLibrasFloat);
+                setResultado(`Euro: ${resultEuro} € \nLibra: ${resultLibra} £ \nDolar: ${resultDolar} US$`)
+            }else{
+                setResultado('Insira um valor valido');
         }
     };
 
@@ -32,24 +37,31 @@ export default function Home() {
                     style={styles.input}
                     placeholder="Digite o valor desejado em REAIS!"
                     onChangeText={newValor => setValor(newValor)}
+                    keyboardType="numeric"
                 />
+
+                <Text style={styles.text}>{'Dolar'}</Text>
                 <TextInput
-                    editable={false}
                     style={styles.input}
                     placeholder={qntdDolar}
-                    onChangeText={newValor => setValor(newValor)}
+                    keyboardType="numeric"
+                    onChangeText={newDolar => setQntdDolar(newDolar)}
                 />
+
+                <Text style={styles.text}>{'Euro'}</Text>
                 <TextInput
-                    editable={false}
                     style={styles.input}
                     placeholder={qntdEuro}
-                    onChangeText={newValor => setValor(newValor)}
+                    keyboardType="numeric"
+                    onChangeText={newEuro => setQntdEuro(newEuro)}
                 />
+
+                <Text style={styles.text}>{'Libra'}</Text>
                 <TextInput
-                    editable={false}
                     style={styles.input}
                     placeholder={qntdLibras}
-                    onChangeText={newValor => setValor(newValor)}
+                    keyboardType="numeric"
+                    onChangeText={newLibras => setQntdLibras(newLibras)}
                 />
 
         <Button color="#000" title="Fazer a Conversão" onPress={converterValores} />
@@ -72,6 +84,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 12,
     borderRadius: 6,
+
   },
 
   title: {
@@ -84,7 +97,7 @@ const styles = StyleSheet.create({
 
   text: {
   fontSize: 18,
-  padding: 8,
+  padding: 1,
   fontWeight: 'bold',
   },
 
