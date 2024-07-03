@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Text, TextInput, StyleSheet, View, Button } from 'react-native';
+import { Text, TextInput, StyleSheet, View, Button, Image } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Home() {
   const titulo = 'Cadastro de Produto';
@@ -12,12 +13,39 @@ export default function Home() {
   const [subtitulo, setSubtitulo] = useState('');
   const [descricao, setDesc] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [takenImage, setTakenImage] = useState(null);
 
   const products = [
     { label: 'Calçado', value: '0' },
     { label: 'Calça', value: '1' },
     { label: 'Camisa', value: '2' },
   ];
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const takePicture = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setTakenImage(result.assets[0].uri);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -61,8 +89,15 @@ export default function Home() {
         onChangeText={(newDesc) => setDesc(newDesc)}
       />
       <Button
+        title="Tirar uma foto"
+        onPress={takePicture}
         color= '#000'
-        title="Fazer a Conversão"
+      />
+      {takenImage && <Image source={{ uri: takenImage }} style={styles.image} />}
+      <Button
+        color="#000"
+        style={styles.button}
+        title="Cadastrar Produto"
       />
     </View>
   );
@@ -119,5 +154,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#20232a',
   },
-
+  image: {
+    width: '100%',
+    height: 200,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  button: {
+    elevation: 3,
+  }
 });
